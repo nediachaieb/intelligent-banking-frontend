@@ -1,0 +1,43 @@
+<div class="p-3">
+  @if (loadingService.isLoading()){
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  }
+  @if (accounts$|async ;as state)
+  {
+    @if (state.status==RequestStatus.SUCCESS)
+    {
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Account ID</th>
+          <th>Balance</th>
+          <th> Date</th>
+          <th> Type</th>
+          <th>CustomerID</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (acc of state.accounts ;track acc)
+        {
+          <tr>
+              <td> {{acc.accountId}}</td>
+              <td> {{acc.balance}}</td>
+              <td> {{acc.createdAt}}</td>
+              <td> {{acc.type}}</td>
+              <td> {{acc.customerId}}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    } @else if(state.status==RequestStatus.ERROR){
+      <div class="text-bg-danger">
+        {{state.errorMessage}}
+      </div>
+
+    }
+
+  }
+</div>
