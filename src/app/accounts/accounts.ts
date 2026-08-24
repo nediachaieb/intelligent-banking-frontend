@@ -9,10 +9,10 @@ import { LoadingService } from '../services/loading';
   selector: 'app-accounts',
   templateUrl: './accounts.html',
   styleUrl: './accounts.css',
+  standalone: true,
   imports: [
     AsyncPipe
-  ],
-  standalone: true
+  ]
 })
 export class Accounts {
   private http= inject(HttpClient);
