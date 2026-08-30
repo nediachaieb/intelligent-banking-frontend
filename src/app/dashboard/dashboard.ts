@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CustomerService } from '../services/customerService';
 import { AccountService } from '../services/accountService';
 import { forkJoin, map, Observable } from 'rxjs';
-import { AsyncPipe, CurrencyPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 
 interface DashboardStats {
 
@@ -12,15 +12,12 @@ interface DashboardStats {
   accounts: number;
 
   activeAccounts: number;
-
-  totalBalance: number;
 }
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     AsyncPipe,
-    CurrencyPipe
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
@@ -59,14 +56,7 @@ export class Dashboard {
           accounts.filter(
             account =>
               account.status === 'ACTIVATED'
-          ).length,
-
-          totalBalance:
-            accounts.reduce(
-              (total, account) =>
-                total + account.balance,
-              0
-            )
+          ).length
 
         };
 

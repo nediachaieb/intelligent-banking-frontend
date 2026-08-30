@@ -10,7 +10,7 @@ export class AccountService {
 
   private http=inject(HttpClient)
   private readonly apiUrlAccount =
-    'http://localhost:9999/BANK-SERVICE/bankAccounts'; readonly
+    'http://localhost:9999/BANK-SERVICE/bankAccounts';
 
 
   getAllAccounts(): Observable<Account[]> {
