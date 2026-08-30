@@ -19,7 +19,7 @@ import { MarkdownComponent } from 'ngx-markdown';
 })
 export class BankBot {
 
-  query : any;
+  query : string = "";
   http = inject(HttpClient);
   response$! : Observable<any>
   public loadingService = inject(LoadingService);
