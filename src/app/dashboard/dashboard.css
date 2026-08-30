@@ -1,0 +1,9 @@
+.dashboard-card {
+  min-height: 130px;
+  border-radius: 16px;
+  transition: transform 0.2s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+}
