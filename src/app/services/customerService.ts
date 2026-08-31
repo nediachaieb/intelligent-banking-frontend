@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Customer, NewCustomer } from '../model/customer.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +11,7 @@ export class CustomerService {
 
   private http = inject(HttpClient);
 
-  private readonly apiUrlCustomer =
-    'http://localhost:9999/CUSTOMER-SERVICE/customers';
+  private readonly apiUrlCustomer =`${environment.api.gateway}/CUSTOMER-SERVICE/customers`;
 
 
   getAllCustomers(): Observable<Customer[]> {

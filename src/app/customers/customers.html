@@ -28,21 +28,25 @@
 
   </div>
 
+  <div class="p-3">
 
-  @if (errorMessage()) {
+    @if (loadingService.isLoading()) {
 
-    <div class="alert alert-danger">
+      <div
+        class="spinner-border text-primary"
+        role="status">
 
-      {{ errorMessage() }}
+      <span class="visually-hidden">
+        Chargement...
+      </span>
 
-    </div>
+      </div>
 
-  }
+    }
+    @if (customers$ | async; as state) {
 
-
-  @if (customers$ | async; as customers) {
-
-    <div class="card border-0 shadow-sm">
+      @if (state.status === RequestStatus.SUCCESS) {
+        <div class="card border-0 shadow-sm">
 
       <div class="table-responsive">
 
@@ -69,8 +73,7 @@
 
           <tbody>
 
-            @for (
-                customer of customers;
+            @for (customer of state.customers;
               track customer.id
               ) {
 
@@ -121,7 +124,18 @@
       </div>
 
     </div>
+      } @else if (state.status === RequestStatus.ERROR) {
 
-  }
+        <div class="alert alert-danger">
+
+          {{ state.errorMessage }}
+
+        </div>
+
+      }
+
+    }
+
+  </div>
 
 </div>

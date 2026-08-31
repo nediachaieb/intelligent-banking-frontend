@@ -1,4 +1,5 @@
 import { Customer } from './customer.model';
+import { RequestStatus } from './request-status.model';
 
 export type AccountType =
   'CURRENT_ACCOUNT'
@@ -29,22 +30,15 @@ export interface Account {
   customer?: Customer;
 }
 
-// export type NewAccount = Pick<
-//   Account,
-//   'balance'
-//   | 'currency'
-//   | 'type'
-//   | 'status'
-//   | 'customerId'
-// >;
-export type NewAccount = Omit<Account, ' accountId , createdAt'>;
-export enum RequestStatus {
-  SUCCESS = 0,
-  ERROR = 1
-}
+export type NewAccount =
+  Omit<
+    Account,
+    'accountId' | 'createdAt' | 'customer'
+  >;
+
  export interface AccountListState{
-    accounts?: Account[];
-    status?: RequestStatus;
+    accounts: Account[];
+    status: RequestStatus;
     errorMessage?: string;
 
  }

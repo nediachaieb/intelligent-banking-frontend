@@ -1,9 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { AsyncPipe } from '@angular/common';
 import { catchError, map, Observable, of } from 'rxjs';
-import { Account, AccountListState, RequestStatus } from '../model/account.model';
+import { AccountListState} from '../model/account.model';
 import { LoadingService } from '../services/loading';
+import { AccountService } from '../services/accountService';
+import { RequestStatus } from '../model/request-status.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-accounts',
@@ -11,26 +13,36 @@ import { LoadingService } from '../services/loading';
   styleUrl: './accounts.css',
   standalone: true,
   imports: [
-    AsyncPipe
+    AsyncPipe,
+    RouterLink
   ]
 })
 export class Accounts {
-  private http= inject(HttpClient);
+  private accountService =
+    inject(AccountService)
   public loadingService = inject(LoadingService);
-  accounts$:Observable<AccountListState> = this.http.get<Account[]>('http://localhost:9999/BANK-SERVICE/bankAccounts').pipe(
-    map(resp => {
-      return {
-        accounts: resp,
-        status: RequestStatus.SUCCESS
+  accounts$: Observable<AccountListState> =
+    this.accountService
+      .getAllAccounts()
+      .pipe(
 
-      }
-    }),
-    catchError((err, caught) => {
-      return of({status: RequestStatus.ERROR, errorMessage: err.statusText});}
+        map(accounts => ({
+          accounts: accounts,
+          status: RequestStatus.SUCCESS
+        })),
 
-    )
-  )
+        catchError(error => {
 
+          return of({
+            accounts: [],
+            status: RequestStatus.ERROR,
+            errorMessage:
+              'Impossible de charger les comptes.'
+          });
+
+        })
+
+      );
 
   protected readonly RequestStatus = RequestStatus;
 }

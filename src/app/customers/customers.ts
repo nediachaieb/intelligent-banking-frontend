@@ -1,41 +1,50 @@
 import { Component, inject, signal } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { CustomerService } from '../services/customerService';
-import { Customer } from '../model/customer.model';
+import { Customer, CustomerListState } from '../model/customer.model';
+import { LoadingService } from '../services/loading';
+import { RequestStatus } from '../model/request-status.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-customers',
   imports: [
-    AsyncPipe
+    AsyncPipe,
+    RouterLink
   ],
   templateUrl: './customers.html',
   styleUrl: './customers.css',
-  standalone: true,S
+  standalone: true,
 })
 export class Customers {
   private customerService =
     inject(CustomerService);
 
+  public loadingService =
+    inject(LoadingService);
 
-  errorMessage =
-    signal('');
-
-
-  customers$: Observable<Customer[]> =
+  customers$: Observable<CustomerListState> =
     this.customerService
       .getAllCustomers()
       .pipe(
+        map(customers =>(
+          {
+            customers:customers,
+            status: RequestStatus.SUCCESS
+          }
 
+        )),
         catchError(error => {
-
-          this.errorMessage.set(
-            'Impossible de charger les clients.'
-          );
-
-          return of([]);
-
+          return of({
+            customers: [],
+            status: RequestStatus.ERROR,
+            errorMessage:
+              'Impossible de charger les clients.'
+          });
         })
 
       );
+  protected readonly RequestStatus =
+    RequestStatus;
 }

@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Account, NewAccount } from '../model/account.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -9,9 +10,7 @@ import { Account, NewAccount } from '../model/account.model';
 export class AccountService {
 
   private http=inject(HttpClient)
-  private readonly apiUrlAccount =
-    'http://localhost:9999/BANK-SERVICE/bankAccounts';
-
+  private readonly apiUrlAccount = `${environment.api.gateway}/BANK-SERVICE/bankAccounts`;
 
   getAllAccounts(): Observable<Account[]> {
     return this.http.get<Account[]>(
