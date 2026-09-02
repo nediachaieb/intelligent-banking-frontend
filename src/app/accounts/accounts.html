@@ -42,11 +42,11 @@
           <table class="table table-striped table-hover">
             <thead>
               <tr>
-                <th>Account ID</th>
-                <th>Balance</th>
-                <th> Date</th>
+                <th>ID</th>
+                <th>Solde</th>
+                <th> Date de création</th>
                 <th> Type</th>
-                <th>CustomerID</th>
+                <th>Client</th>
               </tr>
             </thead>
             <tbody>
@@ -57,7 +57,20 @@
                     <td> {{acc.balance}}</td>
                     <td> {{acc.createdAt}}</td>
                     <td> {{acc.type}}</td>
-                    <td> {{acc.customerId}}</td>
+                  <td>
+
+                    @if (acc.customer) {
+
+                      {{ acc.customer.firstName }}
+                      {{ acc.customer.lastName }}
+
+                    } @else {
+
+                      Client #{{ acc.customerId }}
+
+                    }
+
+                  </td>
                 </tr>
               }
             </tbody>

@@ -1,1 +1,195 @@
-<p>new-customer works!</p>
+<div class="container mt-4">
+
+  <div class="card shadow-sm">
+
+    <div class="card-body">
+
+      <h3 class="mb-4">
+        Nouveau client
+      </h3>
+
+
+      @if (errorMessage()) {
+
+        <div class="alert alert-danger">
+          {{ errorMessage() }}
+        </div>
+
+      }
+
+
+      <form
+        [formGroup]="customerForm"
+        (ngSubmit)="saveCustomer()">
+
+
+        <!-- First name -->
+
+        <div class="mb-3">
+
+          <label
+            for="firstName"
+            class="form-label">
+
+            Prénom
+
+          </label>
+
+          <input
+            id="firstName"
+            type="text"
+            class="form-control"
+            formControlName="firstName">
+
+
+          @if (
+            customerForm.controls.firstName.touched
+            &&
+            customerForm.controls.firstName.invalid
+            ) {
+
+            <div class="text-danger mt-1">
+
+              Le prénom est obligatoire.
+
+            </div>
+
+          }
+
+        </div>
+
+
+        <!-- Last name -->
+
+        <div class="mb-3">
+
+          <label
+            for="lastName"
+            class="form-label">
+
+            Nom
+
+          </label>
+
+          <input
+            id="lastName"
+            type="text"
+            class="form-control"
+            formControlName="lastName">
+
+
+          @if (
+            customerForm.controls.lastName.touched
+            &&
+            customerForm.controls.lastName.invalid
+            ) {
+
+            <div class="text-danger mt-1">
+
+              Le nom est obligatoire.
+
+            </div>
+
+          }
+
+        </div>
+
+
+        <!-- Email -->
+
+        <div class="mb-3">
+
+          <label
+            for="email"
+            class="form-label">
+
+            Email
+
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            class="form-control"
+            formControlName="email">
+
+
+          @if (
+            customerForm.controls.email.touched
+            &&
+            customerForm.controls.email.invalid
+            ) {
+
+            <div class="text-danger mt-1">
+
+              Email invalide.
+
+            </div>
+
+          }
+
+        </div>
+
+
+        <!-- Phone -->
+
+        <div class="mb-3">
+
+          <label
+            for="phone"
+            class="form-label">
+
+            Téléphone
+
+          </label>
+
+          <input
+            id="phone"
+            type="tel"
+            class="form-control"
+            formControlName="phone">
+
+        </div>
+
+
+        <div class="d-flex gap-2">
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="saving()">
+
+            @if (saving()) {
+
+              <span
+                class="spinner-border spinner-border-sm me-2">
+              </span>
+
+              Enregistrement...
+
+            } @else {
+
+              Enregistrer
+
+            }
+
+          </button>
+
+
+          <a
+            routerLink="/customers"
+            class="btn btn-outline-secondary">
+
+            Annuler
+
+          </a>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,17 +1,14 @@
 import { Component, inject } from '@angular/core';
-import { HttpClient, HttpDownloadProgressEvent, HttpEventType } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
-import { LoadingService } from '../services/loading';
+import { Observable, scan, startWith } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
-import { MarkdownComponent } from 'ngx-markdown';
+import { ChatbotService } from '../services/chatbotService';
 
 @Component({
   selector: 'app-bank-bot',
   imports: [
     FormsModule,
     AsyncPipe,
-    MarkdownComponent
   ],
   templateUrl: './bank-bot.html',
   standalone: true,
@@ -19,30 +16,28 @@ import { MarkdownComponent } from 'ngx-markdown';
 })
 export class BankBot {
 
-  query : string = "";
-  http = inject(HttpClient);
-  response$! : Observable<any>
-  public loadingService = inject(LoadingService);
-  // askAgent() {
-  //   this.response$ = this.http
-  //     .get("http://localhost:9999/EBANK-BOT/chat?query="+this.query,
-  //       {responseType:'text'})
-  // }
-  askAgent() {
-    this.response$ = this.http
-      .get("http://localhost:9999/CHAT-SERVICE/chat?query="+this.query,
-        {responseType:'text', observe : "events", reportProgress : true})
-      .pipe(map(event => {
-        switch (event.type){
-          case HttpEventType.Sent:
-            return {'type': 'Sent'}
-          case HttpEventType.DownloadProgress:
-            return  {type: "Response", content : (event as HttpDownloadProgressEvent).partialText }
-          case HttpEventType.Response:
-            return {type : "Response", content : event.body}
-          default :
-            return {type : 'Other', data : event}
-        }
-      }))
+  private readonly chatService = inject(ChatbotService);
+
+  query = '';
+
+  response$?: Observable<string>;
+
+  askAgent(): void {
+
+    const question = this.query.trim();
+
+    if (!question) {
+      return;
+    }
+
+    this.response$ = this.chatService
+      .stream(question)
+      .pipe(
+        scan(
+          (response, chunk) => response + chunk,
+          ''
+        ),
+        startWith('')
+      );
   }
 }

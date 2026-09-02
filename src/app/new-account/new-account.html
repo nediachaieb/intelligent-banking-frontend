@@ -1,1 +1,329 @@
-<p>new-account works!</p>
+<div class="container mt-4">
+
+  <div class="card shadow-sm">
+
+    <div class="card-body">
+
+      <h3 class="mb-4">
+        Nouveau compte
+      </h3>
+
+
+      <!-- Erreur création -->
+
+      @if (errorMessage()) {
+
+        <div
+          class="alert alert-danger"
+          role="alert">
+
+          {{ errorMessage() }}
+
+        </div>
+
+      }
+
+
+      <!-- Erreur chargement clients -->
+
+      @if (customerLoadError()) {
+
+        <div
+          class="alert alert-warning"
+          role="alert">
+
+          {{ customerLoadError() }}
+
+        </div>
+
+      }
+
+
+      <form
+        [formGroup]="accountForm"
+        (ngSubmit)="saveAccount()">
+
+
+        <!-- Balance -->
+
+        <div class="mb-3">
+
+          <label
+            for="balance"
+            class="form-label">
+
+            Solde initial
+
+          </label>
+
+          <input
+            id="balance"
+            type="number"
+            class="form-control"
+            formControlName="balance">
+
+
+          @if (
+            accountForm.controls.balance.touched
+            ) {
+
+            @if (
+              accountForm.controls.balance.hasError('required')
+              ) {
+
+              <div class="text-danger mt-1">
+
+                Le solde est obligatoire.
+
+              </div>
+
+            }
+
+
+            @if (
+              accountForm.controls.balance.hasError('min')
+              ) {
+
+              <div class="text-danger mt-1">
+
+                Le solde ne peut pas être négatif.
+
+              </div>
+
+            }
+
+          }
+
+        </div>
+
+
+        <!-- Currency -->
+
+        <div class="mb-3">
+
+          <label
+            for="currency"
+            class="form-label">
+
+            Devise
+
+          </label>
+
+          <select
+            id="currency"
+            class="form-select"
+            formControlName="currency">
+
+            <option value="TND">
+              TND
+            </option>
+
+            <option value="EUR">
+              EUR
+            </option>
+
+            <option value="USD">
+              USD
+            </option>
+
+          </select>
+
+
+          @if (
+            accountForm.controls.currency.touched
+            &&
+            accountForm.controls.currency.hasError('required')
+            ) {
+
+            <div class="text-danger mt-1">
+
+              La devise est obligatoire.
+
+            </div>
+
+          }
+
+        </div>
+
+
+        <!-- Account Type -->
+
+        <div class="mb-3">
+
+          <label
+            for="type"
+            class="form-label">
+
+            Type de compte
+
+          </label>
+
+          <select
+            id="type"
+            class="form-select"
+            formControlName="type">
+
+            <option value="CURRENT_ACCOUNT">
+
+              Compte courant
+
+            </option>
+
+            <option value="SAVING_ACCOUNT">
+
+              Compte épargne
+
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- Status -->
+
+        <div class="mb-3">
+
+          <label
+            for="status"
+            class="form-label">
+
+            Statut
+
+          </label>
+
+          <select
+            id="status"
+            class="form-select"
+            formControlName="status">
+
+            <option value="CREATED">
+              Créé
+            </option>
+
+            <option value="ACTIVATED">
+              Activé
+            </option>
+
+            <option value="SUSPENDED">
+              Suspendu
+            </option>
+
+            <option value="BLOCKED">
+              Bloqué
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- Customer -->
+
+        <div class="mb-4">
+
+          <label
+            for="customerId"
+            class="form-label">
+
+            Client
+
+          </label>
+
+
+          @if (customers$ | async; as customers) {
+
+            <select
+              id="customerId"
+              class="form-select"
+              formControlName="customerId">
+
+              <option
+                [ngValue]="0">
+
+                Sélectionner un client
+
+              </option>
+
+
+              @for (
+                  customer of customers;
+                track customer.id
+                ) {
+
+                <option
+                  [ngValue]="customer.id">
+
+                  {{ customer.firstName }}
+                  {{ customer.lastName }}
+
+                </option>
+
+              }
+
+            </select>
+
+          }
+
+
+          @if (
+            accountForm.controls.customerId.touched
+            &&
+            accountForm.controls.customerId.invalid
+            ) {
+
+            <div class="text-danger mt-1">
+
+              Veuillez sélectionner un client.
+
+            </div>
+
+          }
+
+        </div>
+
+
+        <!-- Buttons -->
+
+        <div class="d-flex gap-2">
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="saving()">
+
+            @if (saving()) {
+
+              <span
+                class="spinner-border spinner-border-sm me-2"
+                aria-hidden="true">
+              </span>
+
+              Enregistrement...
+
+            } @else {
+
+              Créer le compte
+
+            }
+
+          </button>
+
+
+          <a
+            routerLink="/accounts"
+            class="btn btn-outline-secondary">
+
+            Annuler
+
+          </a>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

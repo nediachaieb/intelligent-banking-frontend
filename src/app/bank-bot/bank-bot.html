@@ -1,25 +1,30 @@
-<div class="p-3">
-  <div class="card-body">
-    <input [(ngModel)]="query" type="text" class="form-control m-2" style="display: inline; width: 80%">
-    <button (click)="askAgent()" class="btn btn-primary" style="display: inline">
-      <i class="bi bi-search"></i>
+<div class="chat-container">
+
+  <div class="input-group">
+
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Posez votre question..."
+      [(ngModel)]="query"
+      (keyup.enter)="askAgent()"
+    >
+
+    <button
+      class="btn btn-primary"
+      (click)="askAgent()"
+    >
+      Envoyer
     </button>
-    <div>
-      @if (loadingService.isLoading()){
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      }
+
+  </div>
+
+  @if (response$ | async; as response) {
+
+    <div class="bot-response">
+      {{ response }}
     </div>
 
-  </div>
-  <div class="card-body">
-    @if (response$ | async ; as resp){
-      @if (resp.type=='Response'){
-        <markdown [data]="resp.content"></markdown>
-      }
-    }
-  </div>
-
+  }
 
 </div>

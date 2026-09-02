@@ -4,7 +4,7 @@ import { BankBot } from './bank-bot/bank-bot';
 import { Dashboard } from './dashboard/dashboard';
 import { Customers } from './customers/customers';
 import { NewCustomer } from './new-customer/new-customer';
-import { NewAccount } from './new-account/new-account';
+import {NewAccountComponent } from './new-account/new-account';
 
 
 export const routes: Routes = [
@@ -36,7 +36,7 @@ export const routes: Routes = [
 
   {
     path: 'accounts/new',
-    component: NewAccount
+    component: NewAccountComponent
   },
 
   {path: "bank-bot",

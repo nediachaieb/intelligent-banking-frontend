@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Customer, NewCustomer } from '../model/customer.model';
+import { Customer, NewCustomerM } from '../model/customer.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -28,7 +28,7 @@ export class CustomerService {
   }
 
   createCustomer(
-    customer: NewCustomer
+    customer: NewCustomerM
   ): Observable<Customer> {
 
     return this.http.post<Customer>(
