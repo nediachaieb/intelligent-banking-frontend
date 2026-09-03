@@ -3,12 +3,15 @@ import { Observable, scan, startWith } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
 import { ChatbotService } from '../services/chatbotService';
+import { LoadingService } from '../services/loading';
+import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
   selector: 'app-bank-bot',
   imports: [
     FormsModule,
     AsyncPipe,
+    MarkdownComponent
   ],
   templateUrl: './bank-bot.html',
   standalone: true,
@@ -21,7 +24,7 @@ export class BankBot {
   query = '';
 
   response$?: Observable<string>;
-
+  public loadingService = inject(LoadingService);
   askAgent(): void {
 
     const question = this.query.trim();
@@ -35,6 +38,7 @@ export class BankBot {
       .pipe(
         scan(
           (response, chunk) => response + chunk,
+
           ''
         ),
         startWith('')

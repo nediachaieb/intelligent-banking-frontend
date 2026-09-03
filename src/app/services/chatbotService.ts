@@ -23,7 +23,7 @@ export class ChatbotService {
       const eventSource = new EventSource(url);
 
       eventSource.onmessage = (event: MessageEvent<string>) => {
-        observer.next(event.data);
+        observer.next(event.data.substring(1));
       };
 
       eventSource.onerror = () => {
