@@ -43,4 +43,15 @@ export type NewAccount =
 
  }
 
+export const ACCOUNT_TYPE_LABELS: Record<AccountType, string> = {
+  CURRENT_ACCOUNT: 'Compte courant',
+  SAVING_ACCOUNT: 'Compte d’épargne'
+};
 
+
+export const ACCOUNT_STATUS_LABELS: Record<AccountStatus, string> = {
+  CREATED: 'Créé',
+  ACTIVATED: 'Actif',
+  SUSPENDED: 'Suspendu',
+  BLOCKED: 'Bloqué'
+};

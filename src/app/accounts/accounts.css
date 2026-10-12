@@ -1,0 +1,33 @@
+.card {
+  border-radius: 1rem;
+}
+
+.table th {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6c757d;
+  white-space: nowrap;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.badge {
+  font-weight: 500;
+}
+
+.btn {
+  border-radius: 0.6rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}

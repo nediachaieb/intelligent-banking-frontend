@@ -5,5 +5,5 @@
 }
 
 .dashboard-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(4px);
 }

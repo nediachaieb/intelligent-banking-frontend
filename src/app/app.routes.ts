@@ -1,50 +1,49 @@
 import { Routes } from '@angular/router';
-import { Accounts } from './accounts/accounts';
-import { BankBot } from './bank-bot/bank-bot';
-import { Dashboard } from './dashboard/dashboard';
-import { Customers } from './customers/customers';
-import { NewCustomer } from './new-customer/new-customer';
-import {NewAccountComponent } from './new-account/new-account';
-
-
 export const routes: Routes = [
   {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full'
   },
-
   {
     path: 'dashboard',
-    component: Dashboard
+    loadComponent: () =>
+      import('./dashboard/dashboard')
+        .then(m => m.Dashboard)
   },
-
   {
     path: 'customers',
-    component: Customers
+    loadComponent: () =>
+      import('./customers/customers')
+        .then(m => m.Customers)
   },
-
   {
     path: 'accounts',
-    component: Accounts
+    loadComponent: () =>
+      import('./accounts/accounts')
+        .then(m => m.Accounts)
   },
-
   {
     path: 'customers/new',
-    component: NewCustomer
+    loadComponent: () =>
+      import('./new-customer/new-customer')
+        .then(m => m.NewCustomerComponent)
   },
-
   {
     path: 'accounts/new',
-    component: NewAccountComponent
+    loadComponent: () =>
+      import('./new-account/new-account')
+        .then(m => m.NewAccountComponent)
   },
-
-  {path: "bank-bot",
-    component:BankBot
+  {
+    path: 'bank-bot',
+    loadComponent: () =>
+      import('./bank-bot/bank-bot')
+        .then(m => m.BankBot)
   },
   {
     path: '**',
     redirectTo: 'dashboard'
   }
-
 ];
+//L’intérêt du lazy loading, c’est de ne pas charger tout le frontend Angular dès l’ouverture de l’application.

@@ -1,5 +1,4 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import {  Observable } from 'rxjs';
 
@@ -8,32 +7,61 @@ import {  Observable } from 'rxjs';
 })
 export class ChatbotService {
 
-  private http =
-    inject(HttpClient);
-
   private readonly apiUrlChat = `${environment.api.gateway}/CHAT-SERVICE/chat`;
 
-  stream(query: string): Observable<string> {
+  stream(
+    query: string,
+    conversationId: string
+  ): Observable<string> {
 
-    return new Observable<string>((observer) => {
+    return new Observable<string>(
+      observer => {
 
-      const url =
-        `${this.apiUrlChat}?query=${encodeURIComponent(query)}`;
+        const url =
+          `${this.apiUrlChat}` +
+          `?query=${encodeURIComponent(query)}` +
+          `&conversationId=${encodeURIComponent(conversationId)}`;
 
-      const eventSource = new EventSource(url);
+        const eventSource =
+          new EventSource(url);
 
-      eventSource.onmessage = (event: MessageEvent<string>) => {
-        observer.next(event.data.substring(1));
-      };
+        let receivedData = false;
 
-      eventSource.onerror = () => {
-        eventSource.close();
-        observer.complete();
-      };
+        eventSource.onmessage =
+          (event: MessageEvent<string>) => {
 
-      return () => {
-        eventSource.close();
-      };
-    });
+            receivedData = true;
+
+            observer.next(
+              event.data.substring(1)
+            );
+          };
+
+
+        eventSource.onerror = () => {
+
+          eventSource.close();
+
+          if (receivedData) {
+
+            observer.complete();
+
+            return;
+          }
+
+          observer.error(
+            new Error(
+              'Impossible de contacter le chatbot.'
+            )
+          );
+        };
+
+
+        return () => {
+          eventSource.close();
+        };
+
+      }
+    );
   }
 }

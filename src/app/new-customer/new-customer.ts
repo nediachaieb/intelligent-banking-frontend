@@ -28,7 +28,7 @@ import {
 import {
   CustomerService
 } from '../services/customerService';
-import { NewCustomerM } from '../model/customer.model';
+import { NewCustomer } from '../model/customer.model';
 
 
 @Component({
@@ -48,7 +48,7 @@ import { NewCustomerM } from '../model/customer.model';
   changeDetection:
   ChangeDetectionStrategy.OnPush
 })
-export class NewCustomer {
+export class NewCustomerComponent {
 
   private readonly fb =
     inject(FormBuilder);
@@ -122,7 +122,7 @@ export class NewCustomer {
     }
 
 
-    const customer: NewCustomerM =
+    const customer: NewCustomer =
       this.customerForm.getRawValue();
 
 

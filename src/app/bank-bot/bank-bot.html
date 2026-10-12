@@ -1,36 +1,218 @@
-<div class="chat-container">
+<div class="chat-page">
 
-  <div class="input-group">
+  <div class="chat-card">
 
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Posez votre question..."
-      [(ngModel)]="query"
-      (keyup.enter)="askAgent()"
-    >
 
-    <button
-      class="btn btn-primary"
-      (click)="askAgent()"
-    >
-      Envoyer
-    </button>
-    <div>
-      @if (loadingService.isLoading()){
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="chat-header">
+
+      <div class="assistant-info">
+
+        <div class="assistant-avatar">
+          <i class="bi bi-robot"></i>
         </div>
+
+        <div>
+          <h1>
+            Assistant bancaire
+          </h1>
+
+          <div class="assistant-status">
+
+            <span class="status-dot"></span>
+
+            Assistant IA disponible
+
+          </div>
+        </div>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-secondary"
+        (click)="clearConversation()"
+        [disabled]="streaming()"
+      >
+
+        <i class="bi bi-trash me-1"></i>
+
+        Effacer
+
+      </button>
+
+    </header>
+
+
+
+    <!-- =========================
+         MESSAGES
+    ========================== -->
+
+    <div
+      #messagesContainer
+      class="messages-container"
+    >
+
+      @for (
+          message of messages();
+        track $index
+        ) {
+
+        <div
+          class="message-row"
+          [class.user-message-row]="
+            message.role === 'user'
+          "
+        >
+
+
+          @if (
+            message.role === 'assistant'
+            ) {
+
+            <div class="message-avatar bot-avatar">
+
+              <i class="bi bi-robot"></i>
+
+            </div>
+
+          }
+
+
+          <div
+            class="message-bubble"
+            [class.user-bubble]="
+              message.role === 'user'
+            "
+            [class.bot-bubble]="
+              message.role === 'assistant'
+            "
+          >
+
+            @if (
+              message.role === 'assistant'
+              ) {
+
+              @if (
+                message.content
+                ) {
+
+                <markdown
+                  [data]="message.content"
+                ></markdown>
+
+              } @else {
+
+                <div class="typing-indicator">
+
+                  <span></span>
+                  <span></span>
+                  <span></span>
+
+                </div>
+
+              }
+
+            } @else {
+
+              {{ message.content }}
+
+            }
+
+          </div>
+
+
+          @if (
+            message.role === 'user'
+            ) {
+
+            <div class="message-avatar user-avatar">
+
+              <i class="bi bi-person"></i>
+
+            </div>
+
+          }
+
+
+        </div>
+
       }
+
+
+      @if (errorMessage()) {
+
+        <div class="alert alert-danger mt-3">
+
+          <i
+            class="bi bi-exclamation-triangle me-2"
+          ></i>
+
+          {{ errorMessage() }}
+
+        </div>
+
+      }
+
     </div>
+
+
+
+    <!-- =========================
+         INPUT
+    ========================== -->
+
+    <div class="chat-input-container">
+
+      <div class="input-wrapper">
+
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Posez une question sur vos clients ou comptes..."
+          [(ngModel)]="query"
+          (keyup.enter)="askAgent()"
+          [disabled]="streaming()"
+        >
+
+
+        <button
+          type="button"
+          class="btn btn-primary send-button"
+          (click)="askAgent()"
+          [disabled]="
+            !query.trim() ||
+            streaming()
+          "
+        >
+
+          @if (streaming()) {
+
+            <span
+              class="spinner-border spinner-border-sm"
+            ></span>
+
+          } @else {
+
+            <i class="bi bi-send"></i>
+
+          }
+
+        </button>
+
+      </div>
+
+
+
+
+    </div>
+
+
   </div>
-
-  @if (response$ | async; as response) {
-
-    <div class="bot-response">
-      <markdown [data]="response"></markdown>
-    </div>
-
-  }
 
 </div>

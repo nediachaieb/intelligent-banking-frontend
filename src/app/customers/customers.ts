@@ -1,50 +1,70 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject
+} from '@angular/core';
+
 import { AsyncPipe } from '@angular/common';
-import { catchError, map, Observable, of } from 'rxjs';
-import { CustomerService } from '../services/customerService';
-import { Customer, CustomerListState } from '../model/customer.model';
-import { LoadingService } from '../services/loading';
-import { RequestStatus } from '../model/request-status.model';
 import { RouterLink } from '@angular/router';
+
+import {
+  catchError,
+  map,
+  Observable,
+  of
+} from 'rxjs';
+
+import { CustomerListState } from '../model/customer.model';
+import { RequestStatus } from '../model/request-status.model';
+
+import { CustomerService } from '../services/customerService';
+import { LoadingService } from '../services/loading';
+
 
 @Component({
   selector: 'app-customers',
+  standalone: true,
+  templateUrl: './customers.html',
+  styleUrl: './customers.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     AsyncPipe,
     RouterLink
-  ],
-  templateUrl: './customers.html',
-  styleUrl: './customers.css',
-  standalone: true,
+  ]
 })
 export class Customers {
-  private customerService =
+
+  private readonly customerService =
     inject(CustomerService);
 
-  public loadingService =
+  protected readonly loadingService =
     inject(LoadingService);
+  protected readonly RequestStatus =
+    RequestStatus;
 
-  customers$: Observable<CustomerListState> =
+
+  protected readonly customers$: Observable<CustomerListState> =
     this.customerService
       .getAllCustomers()
       .pipe(
-        map(customers =>(
-          {
-            customers:customers,
-            status: RequestStatus.SUCCESS
-          }
 
-        )),
-        catchError(error => {
-          return of({
+        map(customers => ({
+          customers,
+          status: RequestStatus.SUCCESS
+        })),
+
+        catchError(() =>
+          of({
             customers: [],
             status: RequestStatus.ERROR,
             errorMessage:
               'Impossible de charger les clients.'
-          });
-        })
+          })
+        )
 
       );
-  protected readonly RequestStatus =
-    RequestStatus;
+
+
+
 }

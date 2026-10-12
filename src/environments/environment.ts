@@ -1,8 +1,8 @@
 export const environment = {
 
-  production: false,
+  production: true,
 
   api: {
-    gateway: 'http://localhost:9999'
+    gateway: '/api'
   }
 };

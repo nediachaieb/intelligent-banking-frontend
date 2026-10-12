@@ -8,7 +8,7 @@ export interface Customer {
   phone: string;
 }
 
-export type NewCustomerM = Omit<Customer, 'id'>;
+export type NewCustomer = Omit<Customer, 'id'>;
 //prends toutes les propriétés de Customer, sauf id.
 export interface CustomerListState {
   customers: Customer[];
